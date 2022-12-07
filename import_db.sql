@@ -1,3 +1,5 @@
+PRAGMA foreign_keys = ON;
+
 CREATE TABLE users (
     id INTEGER PRIMARY KEY,
     fname TEXT NOT NULL,
@@ -21,7 +23,7 @@ CREATE TABLE question_follows (
     question_id INTEGER NOT NULL,
 
     FOREIGN KEY (follower_id) REFERENCES users(id),
-    FOREIGN KEY (question_id) REFERENCES questions(id),
+    FOREIGN KEY (question_id) REFERENCES questions(id)
 )
 
 CREATE TABLE replies (
@@ -37,7 +39,12 @@ CREATE TABLE replies (
 )
 
 CREATE TABLE question_likes (
+    id INTEGER PRIMARY NOT NULL,
+    users_id INTEGER NOT NULL,
+    question_id INTEGER NOT NULL,
     
+    FOREIGN KEY (users_id) REFERENCES questions(id),
+    FOREIGN KEY (question_id) REFERENCES users(id)
 
 )
 
