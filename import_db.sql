@@ -1,9 +1,16 @@
 PRAGMA foreign_keys = ON;
 
+DROP TABLE IF EXISTS question_likes;
+DROP TABLE IF EXISTS replies;
+DROP TABLE IF EXISTS question_follows;
+DROP TABLE IF EXISTS questions;
+DROP TABLE IF EXISTS users;
+
+
 CREATE TABLE users (
     id INTEGER PRIMARY KEY,
     fname TEXT NOT NULL,
-    lname TEXT NOT NULL,
+    lname TEXT NOT NULL
 );
 
 CREATE TABLE questions (
@@ -21,7 +28,7 @@ CREATE TABLE question_follows (
     follower_id INTEGER NOT NULL,
     question_id INTEGER NOT NULL,
 
-    FOREIGN KEY (follower_id) REFERENCES users(id),
+    FOREIGN KEY (follower_id) REFERENCES users(id)
     FOREIGN KEY (question_id) REFERENCES questions(id)
 ); 
 
@@ -32,17 +39,17 @@ CREATE TABLE replies (
     author_id INTEGER NOT NULL,
     parent_replies_id INTEGER,
 
-    FOREIGN KEY (question_id) REFERENCES questions(id),
-    FOREIGN KEY (author_id) REFERENCES users(id),
+    FOREIGN KEY (question_id) REFERENCES questions(id)
+    FOREIGN KEY (author_id) REFERENCES users(id)
     FOREIGN KEY (parent_replies_id) REFERENCES replies(id)
 ); 
 
 CREATE TABLE question_likes (
-    id INTEGER PRIMARY NOT NULL,
+    id INTEGER PRIMARY KEY,
     users_id INTEGER NOT NULL,
     question_id INTEGER NOT NULL,
     
-    FOREIGN KEY (users_id) REFERENCES questions(id),
+    FOREIGN KEY (users_id) REFERENCES questions(id)
     FOREIGN KEY (question_id) REFERENCES users(id)
 ); 
 
@@ -64,8 +71,7 @@ INSERT INTO
     replies (body, question_id, author_id, parent_replies_id)
 VALUES 
     ('SQL is a querying language!', (SELECT id FROM questions WHERE title = 'SQL'), 
-    (SELECT id FROM users WHERE fname = 'Chak' AND lname = 'Chan',
-    IS NULL)), 
+    (SELECT id FROM users WHERE fname = 'Chak' AND lname = 'Chan'), NULL), 
     ('Thanks, Chak!', (SELECT id FROM questions WHERE title = 'SQL'), 
     (SELECT id FROM users WHERE fname = 'Lynsie' AND lname = 'Aragon'),
     (SELECT id FROM replies WHERE body = 'SQL is a querying language!'));
@@ -81,10 +87,10 @@ VALUES
 
 
 INSERT INTO
-    question_follows (users_id, question_id)
+    question_follows (follower_id, question_id)
 VALUES
     ((SELECT id FROM users WHERE fname = 'Chak' AND lname = 'Chan'),
-    (SELECT id FROM questions WHERE title = 'SQL'));
+    (SELECT id FROM questions WHERE title = 'SQL')),
     ((SELECT id FROM users WHERE fname = 'Lynsie' AND lname = 'Aragon'),
     (SELECT id FROM questions WHERE title = 'Recursion'));
 
